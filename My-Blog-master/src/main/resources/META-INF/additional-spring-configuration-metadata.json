@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "static-path-pattern",
+      "type": "java.lang.String",
+      "description": "Description for static-path-pattern."
+  }
+] }
