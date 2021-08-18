@@ -20,21 +20,22 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class BlogServiceImpl implements BlogService {
 
-    @Autowired
+    @Resource
     private BlogMapper blogMapper;
-    @Autowired
+    @Resource
     private BlogCategoryMapper categoryMapper;
-    @Autowired
+    @Resource
     private BlogTagMapper tagMapper;
-    @Autowired
+    @Resource
     private BlogTagRelationMapper blogTagRelationMapper;
-    @Autowired
+    @Resource
     private BlogCommentMapper blogCommentMapper;
 
     @Override

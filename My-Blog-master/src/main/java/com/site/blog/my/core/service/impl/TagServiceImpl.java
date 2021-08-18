@@ -12,14 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 public class TagServiceImpl implements TagService {
 
-    @Autowired
+    @Resource
     private BlogTagMapper blogTagMapper;
-    @Autowired
+    @Resource
     private BlogTagRelationMapper relationMapper;
 
     @Override

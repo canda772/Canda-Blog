@@ -39,6 +39,11 @@ public class AdminController {
         return "admin/login";
     }
 
+    @GetMapping({"/map"})
+    public String canda() {
+        return "canda/map";
+    }
+
     @GetMapping({"", "/", "/index", "/index.html"})
     public String index(HttpServletRequest request) {
         request.setAttribute("path", "index");

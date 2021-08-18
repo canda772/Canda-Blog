@@ -1,4 +1,4 @@
-editormd-toolbar-container/*
+/*
  * Editor.md
  *
  * @file        editormd.amd.js 
@@ -232,7 +232,7 @@ editormd-toolbar-container/*
         atLink               : true,           // for @link
         emailLink            : true,           // for email address auto link
         taskList             : false,          // Enable Github Flavored Markdown task lists
-        emoji                : false,          // :emoji: , Support Github emoji, Twitter Emoji (Twemoji);
+        emoji                : true,          // :emoji: , Support Github emoji, Twitter Emoji (Twemoji);
                                                // Support FontAwesome icon emoji :fa-xxx: > Using fontAwesome icon web fonts;
                                                // Support Editor.md logo icon emoji :editormd-logo: :editormd-logo-1x: > 1~8x;
         tex                  : false,          // TeX(LaTeX), based on KaTeX
@@ -3461,7 +3461,7 @@ editormd-toolbar-container/*
             atLink               : true,           // for @link
             emailLink            : true,           // for mail address auto link
             taskList             : false,          // Enable Github Flavored Markdown task lists
-            emoji                : false,          // :emoji: , Support Twemoji, fontAwesome, Editor.md logo emojis.
+            emoji                : true,          // :emoji: , Support Twemoji, fontAwesome, Editor.md logo emojis.
             tex                  : false,          // TeX(LaTeX), based on KaTeX
             flowChart            : false,          // flowChart.js only support IE9+
             sequenceDiagram      : false,          // sequenceDiagram.js only support IE9+
@@ -3979,7 +3979,7 @@ editormd-toolbar-container/*
             emailLink            : true,    // for mail address auto link
             tex                  : false,
             taskList             : false,   // Github Flavored Markdown task lists
-            emoji                : false,
+            emoji                : true,
             flowChart            : false,
             sequenceDiagram      : false,
             previewCodeHighlight : true
