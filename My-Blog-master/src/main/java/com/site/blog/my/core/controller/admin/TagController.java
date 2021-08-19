@@ -40,10 +40,10 @@ public class TagController {
     @ResponseBody
     public Result save(@RequestParam("tagName") String tagName) {
         if (StringUtils.isEmpty(tagName)) {
-            return ResultGenerator.genFailResult("参数异常！");
+            return ResultGenerator.genFailResult("标签名称不能为空");
         }
         if (tagService.saveTag(tagName)) {
-            return ResultGenerator.genSuccessResult();
+            return ResultGenerator.genSuccessResult("标签上传成功");
         } else {
             return ResultGenerator.genFailResult("标签名称重复");
         }
@@ -53,7 +53,7 @@ public class TagController {
     @ResponseBody
     public Result delete(@RequestBody Integer[] ids) {
         if (ids.length < 1) {
-            return ResultGenerator.genFailResult("参数异常！");
+            return ResultGenerator.genFailResult("请获取正确的标签!");
         }
         if (tagService.deleteBatch(ids)) {
             return ResultGenerator.genSuccessResult();

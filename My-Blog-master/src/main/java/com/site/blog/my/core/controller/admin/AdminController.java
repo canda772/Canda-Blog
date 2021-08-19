@@ -2,6 +2,7 @@ package com.site.blog.my.core.controller.admin;
 
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.service.*;
+import com.site.blog.my.core.util.MD5Util;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -10,12 +11,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-/**
- * @author 13
- * @qq交流群 796794009
- * @email 2449207463@qq.com
- * @link http://13blog.site
- */
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -37,6 +33,11 @@ public class AdminController {
     @GetMapping({"/login"})
     public String login() {
         return "admin/login";
+    }
+
+    @GetMapping({"/register"})
+    public String register() {
+        return "admin/register";
     }
 
     @GetMapping({"/map"})
@@ -74,17 +75,60 @@ public class AdminController {
             return "admin/login";
         }
         AdminUser adminUser = adminUserService.login(userName, password);
-        System.out.println(adminUser);
+        Byte userLock = adminUser.getLocked();
+        if (userLock.equals("1")){
+            session.setAttribute("errorMsg", "该用户已被锁定,请联系管理员QQ:995829376");
+        }
         if (adminUser != null) {
             session.setAttribute("loginUser", adminUser.getNickName());
             session.setAttribute("loginUserId", adminUser.getAdminUserId());
-            //session过期时间设置为7200秒 即两小时
-            //session.setMaxInactiveInterval(60 * 60 * 2);
+//            session过期时间设置为7200秒 即两小时
+            session.setMaxInactiveInterval(60 * 60 * 2);
             return "redirect:/admin/index";
         } else {
             session.setAttribute("errorMsg", "登陆失败");
             return "admin/login";
         }
+    }
+
+    @PostMapping(value = "/register")
+    public String register(@RequestParam("userName") String userName,
+                           @RequestParam("password") String password,
+                           @RequestParam("verifyCode") String verifyCode,
+                           HttpSession session
+                           ){
+        if (StringUtils.isEmpty(verifyCode)) {
+            session.setAttribute("errorMsg", "验证码不能为空");
+            return "admin/register";
+        }
+
+        AdminUser adminUser = new AdminUser();
+        adminUser.setLoginUserName(userName);
+        if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
+            session.setAttribute("errorMsg", "用户名或密码不能为空");
+        }else {
+            Boolean IsRegister = adminUserService.selectByUserVo(adminUser);
+            if (!IsRegister){
+                session.setAttribute("errorMsg", "用户名已存在");
+                return "admin/register";
+            }
+        }
+        String kaptchaCode = session.getAttribute("verifyCode") + "";
+        if (StringUtils.isEmpty(kaptchaCode) || !verifyCode.equals(kaptchaCode)) {
+            session.setAttribute("errorMsg", "验证码错误");
+            return "admin/register";
+        }
+        String passwordMd5 = MD5Util.MD5Encode(password, "UTF-8");
+        adminUser.setLoginPassword(passwordMd5);
+        adminUser.setNickName(userName);
+
+        try {
+            adminUserService.insertSelective(adminUser);
+        }catch (Exception e){
+            session.setAttribute("errorMsg", e);
+        }
+
+        return "redirect:/admin/login";
     }
 
     @GetMapping("/profile")

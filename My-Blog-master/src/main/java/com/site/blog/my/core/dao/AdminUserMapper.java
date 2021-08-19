@@ -3,6 +3,8 @@ package com.site.blog.my.core.dao;
 import com.site.blog.my.core.entity.AdminUser;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface AdminUserMapper {
     int insert(AdminUser record);
 
@@ -22,4 +24,6 @@ public interface AdminUserMapper {
     int updateByPrimaryKeySelective(AdminUser record);
 
     int updateByPrimaryKey(AdminUser record);
+
+    List<AdminUser> selectByUserVo(AdminUser record);
 }

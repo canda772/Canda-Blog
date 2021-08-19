@@ -2,6 +2,8 @@ package com.site.blog.my.core.service;
 
 import com.site.blog.my.core.entity.AdminUser;
 
+import java.util.List;
+
 public interface AdminUserService {
 
     AdminUser login(String userName, String password);
@@ -34,4 +36,7 @@ public interface AdminUserService {
      */
     Boolean updateName(Integer loginUserId, String loginUserName, String nickName);
 
+    Boolean selectByUserVo(AdminUser adminUser);
+
+    int insertSelective(AdminUser adminUser);
 }

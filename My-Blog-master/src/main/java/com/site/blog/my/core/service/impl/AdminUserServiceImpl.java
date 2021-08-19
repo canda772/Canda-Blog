@@ -7,12 +7,18 @@ import com.site.blog.my.core.util.MD5Util;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class AdminUserServiceImpl implements AdminUserService {
 
     @Resource
     private AdminUserMapper adminUserMapper;
+
+    @Override
+    public int insertSelective(AdminUser adminUser) {
+        return adminUserMapper.insertSelective(adminUser);
+    }
 
     @Override
     public AdminUser login(String userName, String password) {
@@ -57,6 +63,15 @@ public class AdminUserServiceImpl implements AdminUserService {
                 //修改成功则返回true
                 return true;
             }
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean selectByUserVo(AdminUser vo){
+        List adminUserList = adminUserMapper.selectByUserVo(vo);
+        if (adminUserList.size()==0){
+            return true;
         }
         return false;
     }
