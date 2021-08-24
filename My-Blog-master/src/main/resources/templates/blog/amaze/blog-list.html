@@ -16,7 +16,7 @@
                                         </div>
                                         <div class="author-lockup blog-flex1">
                                             <a class="link" href="javascript:;"
-                                               th:text="${configurations.get('yourName')}">13</a>
+                                               th:text="${configurations.get('yourName')}">Bobo</a>
                                             <span class="in">in</span>
                                             <span class="category-name">
                                 <a class="category-name" rel="tag" th:href="@{'/category/' + ${blog.blogCategoryName}}"
@@ -26,6 +26,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!--/*@thymesVar id="createTime" type="com"*/-->
                                 <span class="pull-right time pc_time"
                                       th:text="${#dates.format(blog.createTime, 'yyyy-MM-dd')}">2019-01</span>
                             </div>
@@ -38,7 +39,7 @@
                                     <img th:src="@{${blog.blogCoverImage}}" alt=""></a>
                             </div>
                             <div class="clearfix topic-footer">
-                                <span class="pull-left time mobile_time">2018-01</span>
+                                <span class="pull-left time mobile_time" th:text="${#dates.format(blog.createTime, 'yyyy-MM-dd')}"></span>
                             </div>
                     </article>
                 </th:block>

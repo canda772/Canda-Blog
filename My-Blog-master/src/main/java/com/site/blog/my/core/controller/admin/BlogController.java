@@ -4,10 +4,7 @@ import com.site.blog.my.core.config.Constants;
 import com.site.blog.my.core.entity.Blog;
 import com.site.blog.my.core.service.BlogService;
 import com.site.blog.my.core.service.CategoryService;
-import com.site.blog.my.core.util.MyBlogUtils;
-import com.site.blog.my.core.util.PageQueryUtil;
-import com.site.blog.my.core.util.Result;
-import com.site.blog.my.core.util.ResultGenerator;
+import com.site.blog.my.core.util.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -114,6 +111,8 @@ public class BlogController {
         blog.setBlogCoverImage(blogCoverImage);
         blog.setBlogStatus(blogStatus);
         blog.setEnableComment(enableComment);
+        //创建时间
+        blog.setCreateTime(new Date());
         String saveBlogResult = blogService.saveBlog(blog);
         if ("success".equals(saveBlogResult)) {
             return ResultGenerator.genSuccessResult("添加成功");
@@ -167,6 +166,8 @@ public class BlogController {
         blog.setBlogCoverImage(blogCoverImage);
         blog.setBlogStatus(blogStatus);
         blog.setEnableComment(enableComment);
+        //修改时间
+        blog.setUpdateTime(new Date());
         String updateBlogResult = blogService.updateBlog(blog);
         if ("success".equals(updateBlogResult)) {
             return ResultGenerator.genSuccessResult("修改成功");
@@ -188,38 +189,22 @@ public class BlogController {
         StringBuilder tempName = new StringBuilder();
         tempName.append(sdf.format(new Date())).append(r.nextInt(100)).append(suffixName);
         String newFileName = tempName.toString();
-
         //创建文件
         File destFile = new File(Constants.FILE_UPLOAD_DIC + newFileName);
-
-
-
-
         String fileUrl = MyBlogUtils.getHost(new URI(request.getRequestURL() + "")) + "/upload/" + newFileName;
         //String fileUrl ="F:/project/blog/My-Blog-master/src/main/resources/templates/upload/" + newFileName;
-
-
         File fileDirectory = new File(Constants.FILE_UPLOAD_DIC);
-
-
         try {
             request.setCharacterEncoding("utf-8");
             response.setHeader("Content-Type", "text/html");
-
-
             if (!fileDirectory.exists()) {
-
                 fileDirectory.mkdir();
-
                 if (!fileDirectory.mkdir()) {
-
                     throw new IOException("文件夹创建失败,路径为：" + fileDirectory);
-
                 }
             }
             response.getWriter().write("{\"success\": 1, \"message\":\"上传成功\",\"url\":\"" + fileUrl + "\"}");
             file.transferTo(destFile);
-
         } catch (UnsupportedEncodingException e) {
             response.getWriter().write("{\"success\":0}");
         } catch (IOException e) {

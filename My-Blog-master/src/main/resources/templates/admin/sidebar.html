@@ -12,7 +12,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img th:src="@{/admin/dist/img/avatar5.png}" class="img-circle elevation-2" alt="User Image">
+                <img th:src="@{/admin/dist/img/Bobo.png}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
                 <a href="#" class="d-block" th:text="${session.loginUser}"></a>
@@ -29,7 +29,7 @@
                     <a th:href="@{/admin/index}" th:class="${path}=='index'?'nav-link active':'nav-link'">
                         <i class="nav-icon fa fa-dashboard"></i>
                         <p>
-                            Canda
+                            模块管理
                         </p>
                     </a>
                 </li>
@@ -38,6 +38,15 @@
                         <i class="nav-icon fa fa fa-pencil-square-o"></i>
                         <p>
                             发布博客
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-header">家园模块</li>
+                <li class="nav-item">
+                    <a th:href="@{/games/index}" th:class="${path}=='games'?'nav-link active':'nav-link'">
+                        <i class="fa fa-apple nav-icon" aria-hidden="true"></i>
+                        <p>
+                            娱乐游戏
                         </p>
                     </a>
                 </li>

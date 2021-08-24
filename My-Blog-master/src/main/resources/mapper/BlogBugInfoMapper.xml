@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.site.blog.my.core.dao.BugMapper">
+    <resultMap id="BaseResultMap" type="com.site.blog.my.core.entity.BugModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="bug_no" jdbcType="VARCHAR" property="bugNo"/>
+        <result column="bug_name" jdbcType="VARCHAR" property="bugName"/>
+        <result column="bug_info" jdbcType="VARCHAR" property="bugInfo"/>
+        <result column="bug_level" jdbcType="INTEGER" property="bugLevel"/>
+        <result column="bug_location" jdbcType="VARCHAR" property="bugLocation"/>
+        <result column="bug_createUser" jdbcType="VARCHAR" property="createUser"/>
+        <result column="bug_updateUser" jdbcType="VARCHAR" property="updateUser"/>
+        <result column="bug_sts" jdbcType="TINYINT" property="bugSts"/>
+        <result column="bug_updateTime" jdbcType="BIGINT" property="updateTime"/>
+        <result column="bug_createTime" jdbcType="TINYINT" property="createTime"/>
+        <result column="is_deleted" jdbcType="TINYINT" property="isDelete"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, bug_no, bug_name, bug_info,bug_level,bug_location,bug_createUser,bug_updateUser,bug_sts,bug_updateTime,bug_createTime,isDelete
+    </sql>
+
+
+    <insert id="insertBugInfo" parameterType="com.site.blog.my.core.entity.BugModel" >
+        insert into tb_bug
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="bugNo != null" >
+                bug_no,
+            </if>
+            <if test="bugName != null" >
+                bug_name,
+            </if>
+            <if test="bugInfo != null" >
+                bug_info,
+            </if>
+            <if test="bugLevel != null" >
+                bug_level,
+            </if>
+            <if test="bugLocation != null" >
+                bug_location,
+            </if>
+            <if test="createUser != null" >
+                bug_createUser,
+            </if>
+            <if test="updateUser != null" >
+                bug_updateUser,
+            </if>
+            <if test="bugSts != null" >
+                bug_sts,
+            </if>
+            <if test="updateTime != null" >
+                bug_updateTime,
+            </if>
+            <if test="createTime != null" >
+                bug_createTime,
+            </if>
+            <if test="isDelete != null" >
+                is_deleted,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="bugNo != null" >
+                #{modeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="bugName != null" >
+                #{modeName,jdbcType=VARCHAR},
+            </if>
+            <if test="bugInfo != null" >
+                #{prdCode,jdbcType=VARCHAR},
+            </if>
+            <if test="bugLevel != null" >
+                #{modeSts,jdbcType=VARCHAR},
+            </if>
+            <if test="bugLocation != null" >
+                #{specialOpt,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser != null" >
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUser != null" >
+                #{createOrg,jdbcType=VARCHAR},
+            </if>
+            <if test="bugSts != null" >
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{updateOrg,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!--  不直接删除数据，而是修改状态  -->
+    <update id="deleteBugInfo">
+        update tb_bug
+        set is_deleted=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="updateBugInfo" parameterType="com.site.blog.my.core.entity.BugModel">
+        update tb_bug
+        <set>
+            <if test="bugName != null">
+                bug_name = #{bugName,jdbcType=VARCHAR},
+            </if>
+            <if test="bugInfo != null">
+                bug_info = #{bugInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="bugLevel != null">
+                bug_level = #{bugLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="bugLocation != null">
+                bug_location = #{bugLocation,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUser != null">
+                bug_updateUser = #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                bug_updateTime = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="bugSts != null">
+                bug_sts = #{bugSts,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                is_deleted = #{isDelete,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+
+    <select id="selectByParamKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_bug
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectAllBugInfo" parameterType="Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_bug
+        where is_deleted=0
+        <if test="keyword!=null">
+            AND bug_name like CONCAT('%',#{keyword},'%' )
+        </if>
+        <if test="bugSts!=null">
+            AND bug_sts = #{bugSts}
+        </if>
+        order by id  desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="selectByKeyWords" parameterType="Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_bug
+        <where>
+            <if test="bug_name!=null">
+                 (bug_name like CONCAT('%',#{bug_name},'%' ))
+            </if>
+            <if test="createUser!=null">
+                AND (bug_createUser like CONCAT('%',#{createUser},'%' ))
+            </if>
+            <if test="updateUser!=null">
+                AND (bug_updateUser like CONCAT('%',#{updateUser},'%' ))
+            </if>
+            <if test="updateTime!=null">
+                AND (bug_updateTime like CONCAT('%',#{updateTime},'%' ))
+            </if>
+            <if test="createTime!=null">
+                AND (bug_createTime like CONCAT('%',#{createTime},'%' ))
+            </if>
+            <if test="bugSts!=null">
+                AND bug_sts = #{bugSts}
+            </if>
+            order by id  desc
+            <if test="start!=null and limit!=null">
+                limit #{start},#{limit}
+            </if>
+        </where>
+    </select>
+
+    <select id="findBugListByType" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_bug
+        where is_deleted=0 AND bug_sts = 0<!-- 发布状态的文章 -->
+        <if test="type!=null and type==2"> <!--bug等级 0完成 1待处理 2严重-->
+            order by bug_sts desc
+        </if>
+        <if test="type!=null and type==0">
+            order by id desc
+        </if>
+        limit #{limit}
+    </select>
+
+    <select id="getTotalBugs" parameterType="Map" resultType="int">
+        select count(*)
+        from tb_bug
+        where is_deleted=0
+    </select>
+
+</mapper>
