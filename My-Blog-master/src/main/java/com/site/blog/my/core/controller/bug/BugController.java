@@ -1,16 +1,16 @@
 package com.site.blog.my.core.controller.bug;
 
-import com.site.blog.my.core.service.BugService;
+import com.site.blog.my.core.entity.Blog;
+import com.site.blog.my.core.entity.BugModel;
+import com.site.blog.my.core.service.*;
 import com.site.blog.my.core.util.PageResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-@RestController
+@Controller
 @RequestMapping("/bug")
 public class BugController {
 
@@ -18,28 +18,28 @@ public class BugController {
 
     @Resource
     private BugService bugService;
-    /**
-     * 首页
-     */
-    @GetMapping({"/", "/index", "index.html"})
-    public String index(HttpServletRequest request) {
-        return this.page(request, 1);
+
+
+    @GetMapping("/bugs")
+    public String list(HttpServletRequest request) {
+        request.setAttribute("path", "bugs");
+        return "blog/bug/bug";
     }
 
+    @GetMapping("/bugs/edit")
+    public String edit(HttpServletRequest request) {
+        request.setAttribute("path", "edit");
+        return "blog/"+theme+"/edit";
+    }
 
-    /**
-     * 首页 分页数据
-     *
-     * @return
-     */
-    @GetMapping({"/page/{pageNum}"})
-    public String page(HttpServletRequest request, @PathVariable("pageNum") int pageNum) {
-        PageResult blogPageResult = bugService.getBugsForIndexPage(pageNum);
-        if (blogPageResult == null) {
-            return "error/error_404";
-        }
-        request.setAttribute("blogPageResult", blogPageResult);
-        request.setAttribute("pageName", "首页");
-        return "blog/" + theme + "/index";
+    @GetMapping("/bugs/edit/{blogId}")
+    public String edit(HttpServletRequest request, @PathVariable("blogId") String bugId) {
+        request.setAttribute("path", "edit");
+//        BugModel bug = bugService.getBlogById(bugId);
+//        if (bug == null) {
+//            return "error/error_400";
+//        }
+//        request.setAttribute("bug", bug);
+        return "blog/"+theme+"/edit";
     }
 }

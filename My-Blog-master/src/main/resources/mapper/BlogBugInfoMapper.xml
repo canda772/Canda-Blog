@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.site.blog.my.core.dao.BugMapper">
     <resultMap id="BaseResultMap" type="com.site.blog.my.core.entity.BugModel">
-        <id column="id" jdbcType="BIGINT" property="id"/>
+        <id column="bug_id" jdbcType="BIGINT" property="bugId"/>
         <result column="bug_no" jdbcType="VARCHAR" property="bugNo"/>
         <result column="bug_name" jdbcType="VARCHAR" property="bugName"/>
         <result column="bug_info" jdbcType="VARCHAR" property="bugInfo"/>
@@ -17,15 +17,15 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, bug_no, bug_name, bug_info,bug_level,bug_location,bug_createUser,bug_updateUser,bug_sts,bug_updateTime,bug_createTime,isDelete
+        bug_id, bug_no, bug_name, bug_info,bug_level,bug_location,bug_createUser,bug_updateUser,bug_sts,bug_updateTime,bug_createTime,isDelete
     </sql>
 
 
     <insert id="insertBugInfo" parameterType="com.site.blog.my.core.entity.BugModel" >
         insert into tb_bug
         <trim prefix="(" suffix=")" suffixOverrides="," >
-            <if test="id != null" >
-                id,
+            <if test="bugId != null" >
+                bug_id,
             </if>
             <if test="bugNo != null" >
                 bug_no,
@@ -62,41 +62,41 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
-            <if test="id != null" >
-                #{id,jdbcType=VARCHAR},
+            <if test="bugId != null" >
+                #{bugId,jdbcType=VARCHAR},
             </if>
             <if test="bugNo != null" >
-                #{modeCode,jdbcType=VARCHAR},
+                #{bugNo,jdbcType=VARCHAR},
             </if>
             <if test="bugName != null" >
-                #{modeName,jdbcType=VARCHAR},
+                #{bugName,jdbcType=VARCHAR},
             </if>
             <if test="bugInfo != null" >
-                #{prdCode,jdbcType=VARCHAR},
+                #{bugInfo,jdbcType=VARCHAR},
             </if>
             <if test="bugLevel != null" >
-                #{modeSts,jdbcType=VARCHAR},
+                #{bugLevel,jdbcType=VARCHAR},
             </if>
             <if test="bugLocation != null" >
-                #{specialOpt,jdbcType=VARCHAR},
+                #{bugLocation,jdbcType=VARCHAR},
             </if>
             <if test="createUser != null" >
                 #{createUser,jdbcType=VARCHAR},
             </if>
             <if test="updateUser != null" >
-                #{createOrg,jdbcType=VARCHAR},
-            </if>
-            <if test="bugSts != null" >
-                #{createTime,jdbcType=VARCHAR},
-            </if>
-            <if test="updateTime != null" >
                 #{updateUser,jdbcType=VARCHAR},
             </if>
+            <if test="bugSts != null" >
+                #{bugSts,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
             <if test="createTime != null" >
-                #{updateOrg,jdbcType=VARCHAR},
+                #{createTime,jdbcType=VARCHAR},
             </if>
             <if test="isDelete != null" >
-                #{updateTime,jdbcType=VARCHAR},
+                #{isDelete,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -104,9 +104,9 @@
     <!--  不直接删除数据，而是修改状态  -->
     <update id="deleteBugInfo">
         update tb_bug
-        set is_deleted=1 where id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
+        set is_deleted=1 where bug_id in
+        <foreach item="bugId" collection="array" open="(" separator="," close=")">
+            #{bugId}
         </foreach>
     </update>
 
@@ -138,7 +138,7 @@
                 is_deleted = #{isDelete,jdbcType=VARCHAR},
             </if>
         </set>
-        where id = #{id,jdbcType=VARCHAR}
+        where bug_id = #{bugId,jdbcType=VARCHAR}
     </update>
 
 
@@ -146,7 +146,7 @@
         select
         <include refid="Base_Column_List"/>
         from tb_bug
-        where id = #{id,jdbcType=VARCHAR}
+        where bug_id = #{bugId,jdbcType=VARCHAR}
     </select>
 
     <select id="selectAllBugInfo" parameterType="Map" resultMap="BaseResultMap">
@@ -160,7 +160,7 @@
         <if test="bugSts!=null">
             AND bug_sts = #{bugSts}
         </if>
-        order by id  desc
+        order by bug_id  desc
         <if test="start!=null and limit!=null">
             limit #{start},#{limit}
         </if>
@@ -189,7 +189,7 @@
             <if test="bugSts!=null">
                 AND bug_sts = #{bugSts}
             </if>
-            order by id  desc
+            order by bug_id  desc
             <if test="start!=null and limit!=null">
                 limit #{start},#{limit}
             </if>
@@ -205,7 +205,7 @@
             order by bug_sts desc
         </if>
         <if test="type!=null and type==0">
-            order by id desc
+            order by bug_id desc
         </if>
         limit #{limit}
     </select>
