@@ -148,6 +148,7 @@ $('#saveButton').click(function () {
     var blogCoverImage = $('#blogCoverImage')[0].src;
     var blogStatus = $("input[name='blogStatus']:checked").val();
     var enableComment = $("input[name='enableComment']:checked").val();
+    var blogVisibilityFlag = $("input[name='blogVisibilityFlag']:checked").val();
     if (isNull(blogCoverImage) || blogCoverImage.indexOf('img-upload') != -1) {
         swal("封面图片不能为空", {
             icon: "error",
@@ -159,7 +160,7 @@ $('#saveButton').click(function () {
     var data = {
         "blogTitle": blogTitle, "blogSubUrl": blogSubUrl, "blogCategoryId": blogCategoryId,
         "blogTags": blogTags, "blogContent": blogContent, "blogCoverImage": blogCoverImage, "blogStatus": blogStatus,
-        "enableComment": enableComment
+        "enableComment": enableComment,"blogVisibilityFlag": blogVisibilityFlag
     };
     if (blogId > 0) {
         url = '/admin/blogs/update';
@@ -173,7 +174,8 @@ $('#saveButton').click(function () {
             "blogContent": blogContent,
             "blogCoverImage": blogCoverImage,
             "blogStatus": blogStatus,
-            "enableComment": enableComment
+            "enableComment": enableComment,
+            "blogVisibilityFlag": blogVisibilityFlag
         };
     }
     console.log(data);

@@ -77,7 +77,8 @@ public class BlogController {
                        @RequestParam("blogContent") String blogContent,
                        @RequestParam("blogCoverImage") String blogCoverImage,
                        @RequestParam("blogStatus") Byte blogStatus,
-                       @RequestParam("enableComment") Byte enableComment) {
+                       @RequestParam("enableComment") Byte enableComment,
+                       @RequestParam("blogVisibilityFlag") String blogVisibilityFlag) {
         if (StringUtils.isEmpty(blogTitle)) {
             return ResultGenerator.genFailResult("请输入文章标题");
         }
@@ -102,6 +103,10 @@ public class BlogController {
         if (StringUtils.isEmpty(blogCoverImage)) {
             return ResultGenerator.genFailResult("封面图不能为空");
         }
+        //博客可见标识
+        if (StringUtils.isEmpty(blogVisibilityFlag)) {
+            blogVisibilityFlag = "0";
+        }
         Blog blog = new Blog();
         blog.setBlogTitle(blogTitle);
         blog.setBlogSubUrl(blogSubUrl);
@@ -111,6 +116,7 @@ public class BlogController {
         blog.setBlogCoverImage(blogCoverImage);
         blog.setBlogStatus(blogStatus);
         blog.setEnableComment(enableComment);
+        blog.setBlogVisibilityFlag(blogVisibilityFlag);
         //创建时间
         blog.setCreateTime(new Date());
         String saveBlogResult = blogService.saveBlog(blog);

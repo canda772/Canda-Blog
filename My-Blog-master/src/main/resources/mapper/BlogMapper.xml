@@ -15,13 +15,14 @@
         <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="blog_visibility_flag" jdbcType="VARCHAR" property="blogVisibilityFlag"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.site.blog.my.core.entity.Blog">
         <result column="blog_content" jdbcType="LONGVARCHAR" property="blogContent"/>
     </resultMap>
     <sql id="Base_Column_List">
     blog_id, blog_title, blog_sub_url, blog_cover_image, blog_category_id, blog_category_name, 
-    blog_tags, blog_status, blog_views, enable_comment, is_deleted, create_time, update_time
+    blog_tags, blog_status, blog_views, enable_comment, is_deleted, create_time, update_time,blog_visibility_flag
   </sql>
     <sql id="Blob_Column_List">
     blog_content
@@ -44,6 +45,12 @@
         </if>
         <if test="blogStatus!=null">
             AND blog_status = #{blogStatus}
+        </if>
+        <if test="blogVisibilityFlag==null">
+            AND blog_visibility_flag = '0'
+        </if>
+        <if test="blogVisibilityFlag!=null">
+            AND blog_visibility_flag = '1'
         </if>
         <if test="blogCategoryId!=null">
             AND blog_category_id = #{blogCategoryId}
@@ -124,7 +131,7 @@
     insert into tb_blog (blog_id, blog_title, blog_sub_url, 
       blog_cover_image, blog_category_id, blog_category_name, 
       blog_tags, blog_status, blog_views, 
-      enable_comment, is_deleted, create_time, 
+      enable_comment,blog_visibility_flag, is_deleted, create_time,
       update_time, blog_content)
     values (#{blogId,jdbcType=BIGINT}, #{blogTitle,jdbcType=VARCHAR}, #{blogSubUrl,jdbcType=VARCHAR}, 
       #{blogCoverImage,jdbcType=VARCHAR}, #{blogCategoryId,jdbcType=INTEGER}, #{blogCategoryName,jdbcType=VARCHAR}, 
@@ -178,6 +185,9 @@
             <if test="blogContent != null">
                 blog_content,
             </if>
+            <if test="blogVisibilityFlag != null">
+                blog_visibility_flag,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="blogId != null">
@@ -221,6 +231,9 @@
             </if>
             <if test="blogContent != null">
                 #{blogContent,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="blogVisibilityFlag != null">
+                blog_visibility_flag,
             </if>
         </trim>
     </insert>

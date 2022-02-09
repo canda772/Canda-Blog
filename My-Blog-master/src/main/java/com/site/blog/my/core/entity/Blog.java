@@ -34,6 +34,16 @@ public class Blog {
 
     private String blogContent;
 
+    private String blogVisibilityFlag;
+
+    public String getBlogVisibilityFlag() {
+        return blogVisibilityFlag;
+    }
+
+    public void setBlogVisibilityFlag(String blogVisibilityFlag) {
+        this.blogVisibilityFlag = blogVisibilityFlag;
+    }
+
     public Long getBlogId() {
         return blogId;
     }
