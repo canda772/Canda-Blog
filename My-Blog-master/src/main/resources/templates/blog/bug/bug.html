@@ -97,11 +97,19 @@
                          with font-awesome or any other icon font library -->
                     <li class="nav-header">C-A-N-D-A</li>
                     <li class="nav-item">
-                        <a th:href="@{/bug/bugs}" th:class="${path}=='bugs'?'nav-link active':'nav-link'">
+                        <a th:href="@{/bug/bugs}"
+                           th:class="${path}=='bugs'?'nav-link active':'nav-link'">
                             <i class="nav-icon fa fa-dashboard"></i>
                             <p>
                                 BUG管理
                             </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/bug/levels}"
+                           th:class="${path}=='levels'?'nav-link active':'nav-link'">
+                            <i class="fa fa-user-secret nav-icon"></i>
+                            <p>级别管理</p>
                         </a>
                     </li>
                 </ul>
@@ -135,7 +143,7 @@
                             <button class="btn btn-danger" onclick="deleteBugs()"><i
                                     class="fa fa-trash-o"></i>&nbsp;删除
                             </button>&nbsp;&nbsp;
-                            <input type="text" placeholder="关键字(标题/分类)" id="keyword" class="form-control col-2">&nbsp;
+                            <input type="text" placeholder="关键字(标题/级别)" id="keyword" class="form-control col-2">&nbsp;
                             <button class="btn btn-info" onclick="search()"><i
                                     class="fa fa-search"></i>&nbsp;搜索
                             </button>

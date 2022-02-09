@@ -25,4 +25,6 @@ public interface BugMapper {
     List<BugModel> selectByKeyWords(BugModel record);
 
     int getTotalBugs(PageQueryUtil pageUtil);
+
+    int updateBugLevels(@Param("LevelName") String LevelName, @Param("levelId") Integer levelId, @Param("ids")Integer[] ids);
 }

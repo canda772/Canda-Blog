@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.site.blog.my.core.dao.BugLevelMapper">
+    <resultMap id="BaseResultMap" type="com.site.blog.my.core.entity.BugLevel">
+        <id column="level_id" jdbcType="INTEGER" property="levelId"/>
+        <result column="level_name" jdbcType="VARCHAR" property="levelName"/>
+        <result column="level_sts" jdbcType="VARCHAR" property="levelSts"/>
+        <result column="level_icon" jdbcType="VARCHAR" property="levelIcon"/>
+        <result column="level_createTime" jdbcType="TIMESTAMP" property="levelCreateTime"/>
+        <result column="level_updateTime" jdbcType="TIMESTAMP" property="levelUpdateTime"/>
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    level_id, level_name, level_sts,level_icon, level_createTime, level_updateTime, is_deleted
+  </sql>
+    <select id="findLevelList" parameterType="Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_bug_level
+        where is_deleted=0
+        order by level_sts desc,level_createTime desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getTotalLevels" parameterType="Map" resultType="int">
+    select count(*)  from tb_bug_level
+    where is_deleted=0
+    </select>
+
+
+    <select id="getDelTotalLevels" parameterType="Map" resultType="int">
+    select count(*)  from tb_bug_level
+    where is_deleted=1
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_bug_level
+        where level_id = #{levelId,jdbcType=INTEGER} AND is_deleted = 0
+    </select>
+    <select id="selectByLevelIds" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_bug_level
+        where level_id IN
+        <foreach collection="levelIds" item="item" index="index"
+                 open="(" separator="," close=")">#{item}
+        </foreach>
+        AND is_deleted = 0
+    </select>
+
+    <select id="selectByLevelName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_bug_level
+        where level_name = #{levelName,jdbcType=VARCHAR} AND is_deleted = 0
+    </select>
+    <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    UPDATE tb_bug_level SET  is_deleted = 1
+    where level_id = #{levelId,jdbcType=INTEGER} AND is_deleted = 0
+    </update>
+    <update id="deleteBatch">
+        update tb_bug_level
+        set is_deleted=1 where level_id in
+        <foreach item="levelId" collection="array" open="(" separator="," close=")">
+            #{levelId}
+        </foreach>
+    </update>
+
+    <delete id="deleteAll" parameterType="java.lang.String">
+        delete
+        from tb_bug_level
+        where is_deleted=1
+    </delete>
+
+    <insert id="insert" parameterType="com.site.blog.my.core.entity.BugLevel">
+    insert into tb_bug_level (level_id, level_name, level_icon,
+      level_sts, is_deleted, level_createTime,level_updateTime
+      )
+    values (#{levelId,jdbcType=INTEGER}, #{levelName,jdbcType=VARCHAR}, #{levelIcon,jdbcType=VARCHAR},
+      #{levelSts,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{levelCreateTime,jdbcType=TIMESTAMP},#{levelUpdateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.site.blog.my.core.entity.BugLevel">
+        insert into tb_bug_level
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="levelId != null">
+                level_id,
+            </if>
+            <if test="levelName != null">
+                level_name,
+            </if>
+            <if test="levelIcon != null">
+                level_icon,
+            </if>
+            <if test="levelSts != null">
+                level_sts,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="levelCreateTime != null">
+                level_createTime,
+            </if>
+            <if test="levelUpdateTime != null">
+                level_updateTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="levelId != null">
+                #{levelId,jdbcType=INTEGER},
+            </if>
+            <if test="levelName != null">
+                #{levelName,jdbcType=VARCHAR},
+            </if>
+            <if test="levelIcon != null">
+                #{levelIcon,jdbcType=VARCHAR},
+            </if>
+            <if test="levelSts != null">
+                #{levelSts,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="levelCreateTime != null">
+                #{levelCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="levelUpdateTime != null">
+                #{levelUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.site.blog.my.core.entity.BugLevel">
+        update tb_bug_level
+        <set>
+            <if test="levelName != null">
+                level_name = #{levelName,jdbcType=VARCHAR},
+            </if>
+            <if test="levelIcon != null">
+                level_icon = #{levelIcon,jdbcType=VARCHAR},
+            </if>
+            <if test="levelSts != null">
+                level_sts = #{levelSts,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="levelCreateTime != null">
+                level_createTime = #{levelCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="levelUpdateTime != null">
+                level_updateTime = #{levelUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where level_id = #{levelId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.site.blog.my.core.entity.BugLevel">
+    update tb_bug_level
+    set level_name = #{levelName,jdbcType=VARCHAR},
+      level_icon = #{levelIcon,jdbcType=VARCHAR},
+      level_rank = #{levelSts,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      level_createTime = #{levelCreateTime,jdbcType=TIMESTAMP}
+      level_updateTime = #{levelUpdateTime,jdbcType=TIMESTAMP}
+    where level_id = #{levelId,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -7,7 +7,7 @@
         Powered by <a href="https://github.com/ZHENFENG13" target="_blank" th:text="${configurations.get('footerCopyRight')}">2021 能猫</a><br/>
         ICP <a href="http://www.beian.miit.gov.cn" th:text="${configurations.get('footerICP')}">浙ICP备 888888-8号</a>
         <span class="ft-warn">&heartsuit;</span>
-        Theme <a rel="friend" href="https://github.com/spiritree/typecho-theme-amaze" target="_blank"> Amaze</a> 如有问题请点击: <a style="color: #0C9A9A" href="../bug/bugs" target="_blank">BUG提交</a> & <a href="https://github.com/canda772/Canda-Blog" target="_blank">SuCu.Pang</a>
+        Theme <a rel="friend" href="https://github.com/spiritree/typecho-theme-amaze" target="_blank"> Amaze</a> 如有问题请点击: <a style="color: #0C9A9A" th:href="@{/bug/levels}">BUG提交</a> & <a href="https://github.com/canda772/Canda-Blog" target="_blank">SuCu.Pang</a>
     </div>
 </footer>
 </html>

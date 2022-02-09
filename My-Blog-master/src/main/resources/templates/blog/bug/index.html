@@ -89,9 +89,16 @@
                     <!-- Add icons to the links using the .nav-icon class
                          with font-awesome or any other icon font library -->
                     <li class="nav-header">C-A-N-D-A</li>
+<!--                    <li class="nav-item">-->
+<!--                        <a th:href="@{/bug/bugs}"-->
+<!--                           th:class="${path}=='bugs'?'nav-link active':'nav-link'">-->
+<!--                            <i class="fa fa-user-secret nav-icon"></i>-->
+<!--                            <p>BUG管理</p>-->
+<!--                        </a>-->
+<!--                    </li>-->
                     <li class="nav-item">
-                        <a th:href="@{/bug/bugs}"
-                           th:class="${path}=='bugs'?'nav-link active':'nav-link'">
+                        <a th:href="@{/bug/levels}"
+                           th:class="${path}=='levels'?'nav-link active':'nav-link'">
                             <i class="fa fa-user-secret nav-icon"></i>
                             <p>BUG管理</p>
                         </a>

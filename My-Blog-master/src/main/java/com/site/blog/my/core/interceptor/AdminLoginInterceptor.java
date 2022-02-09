@@ -16,11 +16,18 @@ public class AdminLoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         String requestServletPath = request.getServletPath();
-        if (requestServletPath.startsWith("/admin") && null == request.getSession().getAttribute("loginUser")) {
-            request.getSession().setAttribute("errorMsg", "请重新登陆");
+        if ((requestServletPath.startsWith("/admin")) && null == request.getSession().getAttribute("loginUser")) {
+            request.getSession().setAttribute("errorMsg", "请登录验证身份");
+            request.getSession().setAttribute("key", "login");
             response.sendRedirect(request.getContextPath() + "/admin/login");
             return false;
-        } else {
+        }
+        else if ((requestServletPath.contains("/bug")) && null == request.getSession().getAttribute("loginUser")){
+            request.getSession().setAttribute("errorMsg", "请核验身份");
+            request.getSession().setAttribute("key", "bug");
+            response.sendRedirect(request.getContextPath() + "/admin/login");
+            return false;
+        }else {
             request.getSession().removeAttribute("errorMsg");
             return true;
         }
