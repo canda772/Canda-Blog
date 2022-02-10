@@ -103,7 +103,7 @@ public class BlogController {
         if (StringUtils.isEmpty(blogCoverImage)) {
             return ResultGenerator.genFailResult("封面图不能为空");
         }
-        //博客可见标识
+        //文章可见度
         if (StringUtils.isEmpty(blogVisibilityFlag)) {
             blogVisibilityFlag = "0";
         }
