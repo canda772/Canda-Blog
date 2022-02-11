@@ -75,7 +75,7 @@ public class AdminController {
             return "admin/login";
         }
         AdminUser adminUser = adminUserService.login(userName, password);
-        Byte userLock = adminUser.getLocked();
+        String userLock = adminUser.getLocked();
         if (userLock.equals("1")){
             session.setAttribute("errorMsg", "该用户已被锁定,请联系管理员QQ:995829376");
             return "admin/login";
@@ -83,13 +83,8 @@ public class AdminController {
         if (adminUser != null) {
             session.setAttribute("loginUser", adminUser.getNickName());
             session.setAttribute("loginUserId", adminUser.getAdminUserId());
-            //session过期时间设置为7200秒 即两小时
+//            session过期时间设置为7200秒 即两小时
             session.setMaxInactiveInterval(60 * 60 * 2);
-            //校验登录Key
-            String key = (String) session.getAttribute("key");
-            if (key!=null && key.equals("bug")){
-                return "redirect:/bug/levels";
-            }
             return "redirect:/admin/index";
         } else {
             session.setAttribute("errorMsg", "登陆失败");
@@ -102,7 +97,7 @@ public class AdminController {
                            @RequestParam("password") String password,
                            @RequestParam("verifyCode") String verifyCode,
                            HttpSession session
-                           ){
+    ){
         if (StringUtils.isEmpty(verifyCode)) {
             session.setAttribute("errorMsg", "验证码不能为空");
             return "admin/register";

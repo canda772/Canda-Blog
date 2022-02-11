@@ -9,7 +9,7 @@ public class AdminUser {
 
     private String nickName;
 
-    private Byte locked;
+    private String locked;
 
     public Integer getAdminUserId() {
         return adminUserId;
@@ -43,11 +43,11 @@ public class AdminUser {
         this.nickName = nickName == null ? null : nickName.trim();
     }
 
-    public Byte getLocked() {
+    public String getLocked() {
         return locked;
     }
 
-    public void setLocked(Byte locked) {
+    public void setLocked(String locked) {
         this.locked = locked;
     }
 

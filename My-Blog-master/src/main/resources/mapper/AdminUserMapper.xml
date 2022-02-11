@@ -6,7 +6,7 @@
     <result column="login_user_name" jdbcType="VARCHAR" property="loginUserName" />
     <result column="login_password" jdbcType="VARCHAR" property="loginPassword" />
     <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
-    <result column="locked" jdbcType="TINYINT" property="locked" />
+    <result column="locked" jdbcType="VARCHAR" property="locked" />
   </resultMap>
   <sql id="Base_Column_List">
     admin_user_id, login_user_name, login_password, nick_name, locked
@@ -16,7 +16,7 @@
     select
     <include refid="Base_Column_List" />
     from tb_admin_user
-    where login_user_name = #{userName,jdbcType=VARCHAR} AND login_password=#{password,jdbcType=VARCHAR} AND locked = 0
+    where login_user_name = #{userName,jdbcType=VARCHAR} AND login_password=#{password,jdbcType=VARCHAR}
   </select>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
