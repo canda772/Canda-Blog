@@ -70,7 +70,7 @@
 			var cm          = this.cm;
 			var settings    = _this.settings;
             
-            if (!settings.emoji)
+            if (settings.emoji)
             {
                 alert("settings.emoji == false");
                 return ;

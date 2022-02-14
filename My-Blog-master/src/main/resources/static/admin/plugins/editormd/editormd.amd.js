@@ -3267,7 +3267,7 @@
             var cursor    = cm.getCursor();
             var selection = cm.getSelection();
             
-            if (!this.settings.emoji)
+            if (this.settings.emoji)
             {
                 alert("Error: settings.emoji == false");
                 return ;
@@ -3304,7 +3304,7 @@
             var cursor    = cm.getCursor();
             var selection = cm.getSelection();
             
-            if (!this.settings.atLink)
+            if (this.settings.atLink)
             {
                 alert("Error: settings.atLink == false");
                 return ;

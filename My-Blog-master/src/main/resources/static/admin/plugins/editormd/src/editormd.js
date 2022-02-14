@@ -150,7 +150,7 @@
         atLink               : true,           // for @link
         emailLink            : true,           // for email address auto link
         taskList             : false,          // Enable Github Flavored Markdown task lists
-        emoji                : false,          // :emoji: , Support Github emoji, Twitter Emoji (Twemoji);
+        emoji                : true,          // :emoji: , Support Github emoji, Twitter Emoji (Twemoji);
                                                // Support FontAwesome icon emoji :fa-xxx: > Using fontAwesome icon web fonts;
                                                // Support Editor.md logo icon emoji :editormd-logo: :editormd-logo-1x: > 1~8x;
         tex                  : false,          // TeX(LaTeX), based on KaTeX
@@ -3188,7 +3188,7 @@
             var cursor    = cm.getCursor();
             var selection = cm.getSelection();
             
-            if (!this.settings.emoji)
+            if (this.settings.emoji)
             {
                 alert("Error: settings.emoji == false");
                 return ;
@@ -3225,7 +3225,7 @@
             var cursor    = cm.getCursor();
             var selection = cm.getSelection();
             
-            if (!this.settings.atLink)
+            if (this.settings.atLink)
             {
                 alert("Error: settings.atLink == false");
                 return ;
@@ -3382,7 +3382,7 @@
             atLink               : true,           // for @link
             emailLink            : true,           // for mail address auto link
             taskList             : false,          // Enable Github Flavored Markdown task lists
-            emoji                : false,          // :emoji: , Support Twemoji, fontAwesome, Editor.md logo emojis.
+            emoji                : true,          // :emoji: , Support Twemoji, fontAwesome, Editor.md logo emojis.
             tex                  : false,          // TeX(LaTeX), based on KaTeX
             flowChart            : false,          // flowChart.js only support IE9+
             sequenceDiagram      : false,          // sequenceDiagram.js only support IE9+
@@ -3452,7 +3452,7 @@
                             for (var t = 0, len3 = twemojiMatchs.length; t < len3; t++)
                             {
                                 var twe = twemojiMatchs[t].replace(/:/g, "").replace("tw-", "");
-                                return "<img src=\"" + editormd.twemoji.path + twe + editormd.twemoji.ext + "\" title=\"twemoji-" + twe + "\" alt=\"twemoji-" + twe + "\" class=\"emoji twemoji\" />";
+                                return "<img style=\"display:inline;\" src=\"" + editormd.twemoji.path + twe + editormd.twemoji.ext + "\" title=\"twemoji-" + twe + "\" alt=\"twemoji-" + twe + "\" class=\"emoji twemoji\" />";
                             }
                         }
                         else
@@ -3900,7 +3900,7 @@
             emailLink            : true,    // for mail address auto link
             tex                  : false,
             taskList             : false,   // Github Flavored Markdown task lists
-            emoji                : false,
+            emoji                : true,
             flowChart            : false,
             sequenceDiagram      : false,
             previewCodeHighlight : true
