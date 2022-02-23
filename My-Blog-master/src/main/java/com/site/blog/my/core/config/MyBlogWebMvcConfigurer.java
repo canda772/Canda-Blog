@@ -7,6 +7,10 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
+/**
+ * URL请求拦截器
+ */
 @Configuration
 public class MyBlogWebMvcConfigurer implements WebMvcConfigurer {
 
@@ -14,8 +18,6 @@ public class MyBlogWebMvcConfigurer implements WebMvcConfigurer {
     private AdminLoginInterceptor adminLoginInterceptor;
 
     public void addInterceptors(InterceptorRegistry registry) {
-        //  添加一个拦截器，拦截以/bug为前缀的url路径
-        registry.addInterceptor(adminLoginInterceptor).addPathPatterns("/bug/**").excludePathPatterns("/bug/**").excludePathPatterns("/bug/levels").excludePathPatterns("/levels/list");
         // 添加一个拦截器，拦截以/admin为前缀的url路径
         registry.addInterceptor(adminLoginInterceptor).addPathPatterns("/admin/**").excludePathPatterns("/admin/login").excludePathPatterns("/admin/dist/**").excludePathPatterns("/admin/plugins/**");
     }

@@ -107,6 +107,7 @@ public class AdminController {
         adminUser.setLoginUserName(userName);
         if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
             session.setAttribute("errorMsg", "用户名或密码不能为空");
+            return "admin/register";
         }else {
             Boolean IsRegister = adminUserService.selectByUserVo(adminUser);
             if (!IsRegister){
