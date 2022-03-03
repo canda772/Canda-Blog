@@ -45,7 +45,7 @@ public class smsCodeService {
     /**
      * 发送短信验证码
      */
-    public String senSmsCode(String mobile, SmsTypeEnum smsTypeEnum,String channel){
+    public String senSmsCode(String mobile, SmsTypeEnum smsTypeEnum,String channel) throws Exception {
         return sendSmsCode(mobile,smsTypeEnum,null,null,channel);
     }
 
@@ -53,7 +53,7 @@ public class smsCodeService {
      * 发送短信验证码
      * 如果短信发送申请流水为空，则以手机号作为 redis缓存key
      */
-    public String sendSmsCode(String mobile, SmsTypeEnum smsTypeEnum, String smsRequestNo, Map<String,Object> dataMap, String channel){
+    public String sendSmsCode(String mobile, SmsTypeEnum smsTypeEnum, String smsRequestNo, Map<String,Object> dataMap, String channel) throws Exception {
         //生成随机短信验证码位数
         String randomCode = CommonUtils.getRandomString(6,false);
         String value = systemParamService.getValue(SMS_CODE_TEST_VALUE+channel);
