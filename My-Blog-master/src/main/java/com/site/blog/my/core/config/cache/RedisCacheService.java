@@ -15,11 +15,11 @@ public class RedisCacheService {
     @Autowired
     private RedisTemplate<String,String> stringRedisTemplate;
 
-    @Value("${service.engine.queue}")
-    private String serviceEngineQueue;
-
-    @Value("{service.retry.queue}")
-    private String serviceRetryQueue;
+//    @Value("${service.engine.queue}")
+//    private String serviceEngineQueue;
+//
+//    @Value("{service.retry.queue}")
+//    private String serviceRetryQueue;
 
     /**
      * 获取缓存值
@@ -61,7 +61,7 @@ public class RedisCacheService {
     }
 
     public void putCodeToCache(String key,String code,long time){
-        String value = stringRedisTemplate.opsForValue().getAndSet(key,code);
+        stringRedisTemplate.opsForValue().set(key,code);
         if (time != 0){
             stringRedisTemplate.expire(key,time, TimeUnit.MILLISECONDS);
         }

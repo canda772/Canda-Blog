@@ -12,12 +12,12 @@
         <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     </resultMap>
     <sql id="Base_Column_List">
-    id, name, value, type, desc, valid, create_date, update_date
+        id, name, value, type, desc, valid, create_date, update_date
     </sql>
 
-    <select id="findByname" resultMap="BaseResultMap">
+    <select id="findByName" resultMap="BaseResultMap">
         SELECT
-        <include refid="Base_Column_List"/>
+        value
         FROM system_param
         WHERE name = #{name,jdbcType=VARCHAR}
     </select>

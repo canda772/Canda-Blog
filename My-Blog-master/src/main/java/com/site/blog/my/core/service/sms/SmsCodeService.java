@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 /**
@@ -26,13 +27,13 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class smsCodeService {
+public class SmsCodeService {
 
-    @Autowired
+    @Resource
     private SmsService smsService;
-    @Autowired
+    @Resource
     private RedisCacheService cacheService;
-    @Autowired
+    @Resource
     private SystemParamService systemParamService;
 
     /**登录验证码过期时间*/
@@ -44,8 +45,13 @@ public class smsCodeService {
 
     /**
      * 发送短信验证码
+     * @param mobile 手机号
+     * @param smsTypeEnum 短信类型 LOGIN-登录
+     * @param channel 渠道号
+     * @return
+     * @throws Exception
      */
-    public String senSmsCode(String mobile, SmsTypeEnum smsTypeEnum,String channel) throws Exception {
+    public SmsReturnBean sendSmsCode(String mobile, SmsTypeEnum smsTypeEnum,String channel) throws Exception {
         return sendSmsCode(mobile,smsTypeEnum,null,null,channel);
     }
 
@@ -53,7 +59,7 @@ public class smsCodeService {
      * 发送短信验证码
      * 如果短信发送申请流水为空，则以手机号作为 redis缓存key
      */
-    public String sendSmsCode(String mobile, SmsTypeEnum smsTypeEnum, String smsRequestNo, Map<String,Object> dataMap, String channel) throws Exception {
+    public SmsReturnBean sendSmsCode(String mobile, SmsTypeEnum smsTypeEnum, String smsRequestNo, Map<String,Object> dataMap, String channel) throws Exception {
         //生成随机短信验证码位数
         String randomCode = CommonUtils.getRandomString(6,false);
         String value = systemParamService.getValue(SMS_CODE_TEST_VALUE+channel);
@@ -64,7 +70,8 @@ public class smsCodeService {
 
         //设置短信验证码过期时间
         String expireTime = systemParamService.getValue(SMSCODE_EXPIRE_TIME+channel);
-        long time = 80L;
+        //默认时间
+        long time = 5000;
         if (StringUtils.isNotBlank(expireTime)){
             time = Long.valueOf(expireTime);
         }
@@ -93,12 +100,12 @@ public class smsCodeService {
             //抛自定义错
         }
         cacheService.removeCodeFromCache(smsCacheKey);
-
+        smsReturnBean.setData(jsonObject);
         //验证码放入redis缓存
         cacheService.putCodeToCache(smsCacheKey,smsCode.toString(),time);
 
         log.info("验证码发送成功，手机号：[{}],短信验证码:[{}]",mobile,randomCode);
-        return randomCode;
+        return smsReturnBean;
     }
 
 
@@ -133,7 +140,7 @@ public class smsCodeService {
 
 
     /**
-     * 生成短信验证码缓存key
+     * 生成短信验证码缓存key   SMS_channel_cacheCode
      */
     private String getSmsCacheKey(String cacheCode,String channel){
         return Constants.SMS_CACHE_PREFIX+channel+"_"+cacheCode;

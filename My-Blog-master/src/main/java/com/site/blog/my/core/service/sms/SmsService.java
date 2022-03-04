@@ -30,12 +30,12 @@ public class SmsService {
         SmsReturnBean smsReturnBean = new SmsReturnBean();
         //templateId:SMS_190268796
         List<String> args = new ArrayList<>();
-        Client client = SmsService.createClient("key", "screy");
+        Client client = SmsService.createClient("key", "se");
         SendSmsRequest sendSmsRequest = new SendSmsRequest()
                 .setPhoneNumbers(mobileNo)
                 .setSignName("天天爱代码")
                 .setTemplateCode(templateId)
-                .setTemplateParam("{\"code\":\"  "+jsonObject.getString("smsCode")+"  \"}");
+                .setTemplateParam("{\"code\":\""+jsonObject.getString("smsCode")+"\"}");
         // 复制代码运行请自行打印 API 的返回值
         try {
             client.sendSms(sendSmsRequest);

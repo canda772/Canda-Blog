@@ -3,7 +3,7 @@ package com.site.blog.my.core.config.sms;
 import org.apache.commons.lang3.StringUtils;
 
 public enum  SmsTypeEnum {
-    LOGIN("LOGIN")
+    login("login")
     ;
 
     private String name;

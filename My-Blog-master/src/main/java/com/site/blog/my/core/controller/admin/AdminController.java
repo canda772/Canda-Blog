@@ -1,8 +1,15 @@
 package com.site.blog.my.core.controller.admin;
 
+import com.alibaba.fastjson.JSONObject;
+import com.site.blog.my.core.config.Constants;
+import com.site.blog.my.core.config.cache.RedisCacheService;
+import com.site.blog.my.core.config.sms.SmsTypeEnum;
 import com.site.blog.my.core.entity.AdminUser;
+import com.site.blog.my.core.entity.sms.SmsReturnBean;
 import com.site.blog.my.core.service.*;
+import com.site.blog.my.core.service.sms.SmsCodeService;
 import com.site.blog.my.core.util.MD5Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +35,10 @@ public class AdminController {
     private TagService tagService;
     @Resource
     private CommentService commentService;
+    @Resource
+    private SmsCodeService smsCodeService;
+    @Resource
+    private RedisCacheService cacheService;
 
 
     @GetMapping({"/login"})
@@ -92,12 +103,40 @@ public class AdminController {
         }
     }
 
+    @PostMapping("/sendSmsCode")
+    public String sendSmsCode(@RequestParam("mobileNo")String mobileNo,
+                              HttpSession session) throws Exception {
+
+        if (StringUtils.isEmpty(mobileNo)){
+            session.setAttribute("errorMsg", "手机号不能为空");
+            return "admin/register";
+        }
+        try {
+            SmsReturnBean  smsReturnBean = smsCodeService.sendSmsCode(mobileNo, SmsTypeEnum.valueOfName("login"),"blog");
+            if(!smsReturnBean.getErrorCode().equals("000000")){
+                session.setAttribute("errorMsg", "短信发送失败");
+                return "admin/register";
+            }
+        }catch (Exception e){
+            session.setAttribute("errorMsg", "短信发送失败");
+            return "admin/register";
+        }
+        session.setAttribute("errorMsg", "短信发送成功");
+        return "admin/register";
+    }
+
+
+
+
+
+
     @PostMapping(value = "/register")
     public String register(@RequestParam("userName") String userName,
                            @RequestParam("password") String password,
+                           @RequestParam("mobileNo") String mobileNo,
                            @RequestParam("verifyCode") String verifyCode,
                            HttpSession session
-    ){
+    ) throws Exception {
         if (StringUtils.isEmpty(verifyCode)) {
             session.setAttribute("errorMsg", "验证码不能为空");
             return "admin/register";
@@ -115,11 +154,24 @@ public class AdminController {
                 return "admin/register";
             }
         }
+
+       String smsCode =  cacheService.getCodeFromCache(Constants.SMS_CACHE_PREFIX+"LOGIN"+"_"+mobileNo);
+        if (StringUtils.isEmpty(smsCode)){
+            session.setAttribute("errorMsg", "短信验证码已过期，请重新进行短信发送");
+            return "admin/register";
+        }
+
         String kaptchaCode = session.getAttribute("verifyCode") + "";
-        if (StringUtils.isEmpty(kaptchaCode) || !verifyCode.equals(kaptchaCode)) {
+        if (StringUtils.isEmpty(kaptchaCode) || !smsCode.equals(kaptchaCode)) {
             session.setAttribute("errorMsg", "验证码错误");
             return "admin/register";
         }
+
+//        String kaptchaCode = session.getAttribute("verifyCode") + "";
+//        if (StringUtils.isEmpty(kaptchaCode) || !verifyCode.equals(kaptchaCode)) {
+//            session.setAttribute("errorMsg", "验证码错误");
+//            return "admin/register";
+//        }
         String passwordMd5 = MD5Util.MD5Encode(password, "UTF-8");
         adminUser.setLoginPassword(passwordMd5);
         adminUser.setNickName(userName);

@@ -9,6 +9,8 @@ public class AdminUser {
 
     private String nickName;
 
+    private String mobileNo;
+
     private String locked;
 
     public Integer getAdminUserId() {
@@ -51,18 +53,23 @@ public class AdminUser {
         this.locked = locked;
     }
 
+    public String getMobileNo() {
+        return mobileNo;
+    }
+
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", adminUserId=").append(adminUserId);
-        sb.append(", loginUserName=").append(loginUserName);
-        sb.append(", loginPassword=").append(loginPassword);
-        sb.append(", nickName=").append(nickName);
-        sb.append(", locked=").append(locked);
-        sb.append("]");
-        return sb.toString();
+        return "AdminUser{" +
+                "adminUserId=" + adminUserId +
+                ", loginUserName='" + loginUserName + '\'' +
+                ", loginPassword='" + loginPassword + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", mobileNo='" + mobileNo + '\'' +
+                ", locked='" + locked + '\'' +
+                '}';
     }
 }
