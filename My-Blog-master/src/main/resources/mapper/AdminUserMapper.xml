@@ -6,17 +6,18 @@
     <result column="login_user_name" jdbcType="VARCHAR" property="loginUserName" />
     <result column="login_password" jdbcType="VARCHAR" property="loginPassword" />
     <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
-    <result column="locked" jdbcType="TINYINT" property="locked" />
+    <result column="mobile_no" jdbcType="VARCHAR" property="mobileNo" />
+    <result column="locked" jdbcType="VARCHAR" property="locked" />
   </resultMap>
   <sql id="Base_Column_List">
-    admin_user_id, login_user_name, login_password, nick_name, locked
+    admin_user_id, login_user_name, login_password, nick_name,mobile_no, locked
   </sql>
 
   <select id="login" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from tb_admin_user
-    where login_user_name = #{userName,jdbcType=VARCHAR} AND login_password=#{password,jdbcType=VARCHAR} AND locked = 0
+    where login_user_name = #{userName,jdbcType=VARCHAR} AND login_password=#{password,jdbcType=VARCHAR}
   </select>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -27,9 +28,9 @@
   </select>
   <insert id="insert" parameterType="com.site.blog.my.core.entity.AdminUser">
     insert into tb_admin_user (admin_user_id, login_user_name, login_password, 
-      nick_name, locked)
+      nick_name, mobile_no,locked)
     values (#{adminUserId,jdbcType=INTEGER}, #{loginUserName,jdbcType=VARCHAR}, #{loginPassword,jdbcType=VARCHAR}, 
-      #{nickName,jdbcType=VARCHAR}, #{locked,jdbcType=TINYINT})
+      #{nickName,jdbcType=VARCHAR},#{mobileNo,jdbcType=VARCHAR}, #{locked,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.site.blog.my.core.entity.AdminUser">
     insert into tb_admin_user
@@ -45,6 +46,9 @@
       </if>
       <if test="nickName != null">
         nick_name,
+      </if>
+      <if test="monileNo != null">
+        mobile_no,
       </if>
       <if test="locked != null">
         locked,
@@ -62,6 +66,9 @@
       </if>
       <if test="nickName != null">
         #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileNo != null">
+        #{mobileNo,jdbcType=VARCHAR},
       </if>
       <if test="locked != null">
         #{locked,jdbcType=TINYINT},

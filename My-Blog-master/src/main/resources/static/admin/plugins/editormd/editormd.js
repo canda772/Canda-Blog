@@ -3198,7 +3198,7 @@
             var cursor    = cm.getCursor();
             var selection = cm.getSelection();
             
-            if (!this.settings.emoji)
+            if (this.settings.emoji)
             {
                 alert("Error: settings.emoji == false");
                 return ;
@@ -3235,7 +3235,7 @@
             var cursor    = cm.getCursor();
             var selection = cm.getSelection();
             
-            if (!this.settings.atLink)
+            if (this.settings.atLink)
             {
                 alert("Error: settings.atLink == false");
                 return ;
@@ -3462,7 +3462,7 @@
                             for (var t = 0, len3 = twemojiMatchs.length; t < len3; t++)
                             {
                                 var twe = twemojiMatchs[t].replace(/:/g, "").replace("tw-", "");
-                                return "<img src=\"" + editormd.twemoji.path + twe + editormd.twemoji.ext + "\" title=\"twemoji-" + twe + "\" alt=\"twemoji-" + twe + "\" class=\"emoji twemoji\" />";
+                                return "<img style=\"display:inline;\" src=\"" + editormd.twemoji.path + twe + editormd.twemoji.ext + "\" title=\"twemoji-" + twe + "\" alt=\"twemoji-" + twe + "\" class=\"emoji twemoji\" />";
                             }
                         }
                         else
