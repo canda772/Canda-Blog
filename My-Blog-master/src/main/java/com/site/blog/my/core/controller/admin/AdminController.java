@@ -131,9 +131,7 @@ public class AdminController {
 
 
     @PostMapping(value = "/register")
-    public String register(@RequestParam("userName") String userName,
-                           @RequestParam("password") String password,
-                           @RequestParam("mobileNo") String mobileNo,
+    public String register(@RequestParam("mobileNo") String mobileNo,
                            @RequestParam("verifyCode") String verifyCode,
                            HttpSession session
     ) throws Exception {
@@ -143,9 +141,9 @@ public class AdminController {
         }
 
         AdminUser adminUser = new AdminUser();
-        adminUser.setLoginUserName(userName);
-        if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
-            session.setAttribute("errorMsg", "用户名或密码不能为空");
+        adminUser.setLoginUserName(mobileNo);
+        if (StringUtils.isEmpty(mobileNo) || StringUtils.isEmpty(verifyCode)) {
+            session.setAttribute("errorMsg", "手机号或验证码不能为空");
             return "admin/register";
         }else {
             Boolean IsRegister = adminUserService.selectByUserVo(adminUser);
@@ -172,9 +170,9 @@ public class AdminController {
 //            session.setAttribute("errorMsg", "验证码错误");
 //            return "admin/register";
 //        }
-        String passwordMd5 = MD5Util.MD5Encode(password, "UTF-8");
+        String passwordMd5 = MD5Util.MD5Encode(mobileNo, "UTF-8");
         adminUser.setLoginPassword(passwordMd5);
-        adminUser.setNickName(userName);
+        adminUser.setNickName(mobileNo);
 
         try {
             adminUserService.insertSelective(adminUser);

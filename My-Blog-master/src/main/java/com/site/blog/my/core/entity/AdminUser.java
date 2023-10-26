@@ -1,16 +1,29 @@
 package com.site.blog.my.core.entity;
 
 public class AdminUser {
+    /**
+     * 用户userId
+     */
     private Integer adminUserId;
-
+    /**
+     * 用户名称
+     */
     private String loginUserName;
-
+    /**
+     * 登录密码
+     */
     private String loginPassword;
-
+    /**
+     * 用户昵称
+     */
     private String nickName;
-
+    /**
+     * 用户手机号
+     */
     private String mobileNo;
-
+    /**
+     * 用户状态
+     */
     private String locked;
 
     public Integer getAdminUserId() {
