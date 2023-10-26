@@ -215,6 +215,7 @@ public class AdminController {
         }
     }
 
+
     @PostMapping("/profile/name")
     @ResponseBody
     public String nameUpdate(HttpServletRequest request, @RequestParam("loginUserName") String loginUserName,
