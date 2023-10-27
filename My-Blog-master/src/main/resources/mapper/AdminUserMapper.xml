@@ -47,7 +47,7 @@
       <if test="nickName != null">
         nick_name,
       </if>
-      <if test="monileNo != null">
+      <if test="mobileNo != null">
         mobile_no,
       </if>
       <if test="locked != null">

@@ -37,8 +37,6 @@ public class AdminController {
     private CommentService commentService;
     @Resource
     private SmsCodeService smsCodeService;
-    @Resource
-    private RedisCacheService cacheService;
 
 
     @GetMapping({"/login"})
@@ -46,10 +44,6 @@ public class AdminController {
         return "admin/login";
     }
 
-    @GetMapping({"/register"})
-    public String register() {
-        return "admin/register";
-    }
 
     @GetMapping({"/map"})
     public String canda() {
@@ -114,73 +108,15 @@ public class AdminController {
         try {
             SmsReturnBean  smsReturnBean = smsCodeService.sendSmsCode(mobileNo, SmsTypeEnum.valueOfName("login"),"blog");
             if(!smsReturnBean.getErrorCode().equals("000000")){
-                session.setAttribute("errorMsg", "短信发送失败");
+                session.setAttribute("errorMsg", "短信发送失败,请重试");
                 return "admin/register";
             }
         }catch (Exception e){
-            session.setAttribute("errorMsg", "短信发送失败");
+            session.setAttribute("errorMsg", "短信发送失败,请重试");
             return "admin/register";
         }
-        session.setAttribute("errorMsg", "短信发送成功");
+        session.setAttribute("errorMsg", "短信已发送");
         return "admin/register";
-    }
-
-
-
-
-
-
-    @PostMapping(value = "/register")
-    public String register(@RequestParam("mobileNo") String mobileNo,
-                           @RequestParam("verifyCode") String verifyCode,
-                           HttpSession session
-    ) throws Exception {
-        if (StringUtils.isEmpty(verifyCode)) {
-            session.setAttribute("errorMsg", "验证码不能为空");
-            return "admin/register";
-        }
-
-        AdminUser adminUser = new AdminUser();
-        adminUser.setLoginUserName(mobileNo);
-        if (StringUtils.isEmpty(mobileNo) || StringUtils.isEmpty(verifyCode)) {
-            session.setAttribute("errorMsg", "手机号或验证码不能为空");
-            return "admin/register";
-        }else {
-            Boolean IsRegister = adminUserService.selectByUserVo(adminUser);
-            if (!IsRegister){
-                session.setAttribute("errorMsg", "用户名已存在");
-                return "admin/register";
-            }
-        }
-
-       String smsCode =  cacheService.getCodeFromCache(Constants.SMS_CACHE_PREFIX+"LOGIN"+"_"+mobileNo);
-        if (StringUtils.isEmpty(smsCode)){
-            session.setAttribute("errorMsg", "短信验证码已过期，请重新进行短信发送");
-            return "admin/register";
-        }
-
-        String kaptchaCode = session.getAttribute("verifyCode") + "";
-        if (StringUtils.isEmpty(kaptchaCode) || !smsCode.equals(kaptchaCode)) {
-            session.setAttribute("errorMsg", "验证码错误");
-            return "admin/register";
-        }
-
-//        String kaptchaCode = session.getAttribute("verifyCode") + "";
-//        if (StringUtils.isEmpty(kaptchaCode) || !verifyCode.equals(kaptchaCode)) {
-//            session.setAttribute("errorMsg", "验证码错误");
-//            return "admin/register";
-//        }
-        String passwordMd5 = MD5Util.MD5Encode(mobileNo, "UTF-8");
-        adminUser.setLoginPassword(passwordMd5);
-        adminUser.setNickName(mobileNo);
-
-        try {
-            adminUserService.insertSelective(adminUser);
-        }catch (Exception e){
-            session.setAttribute("errorMsg", e);
-        }
-
-        return "redirect:/admin/login";
     }
 
     @GetMapping("/profile")
@@ -214,6 +150,7 @@ public class AdminController {
             return "修改失败";
         }
     }
+
 
     @PostMapping("/profile/name")
     @ResponseBody

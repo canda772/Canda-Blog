@@ -62,6 +62,7 @@ public class RedisCacheService {
 
     public void putCodeToCache(String key,String code,long time){
         stringRedisTemplate.opsForValue().set(key,code);
+        System.out.println("成功写入缓存，缓存key: "+key);
         if (time != 0){
             stringRedisTemplate.expire(key,time, TimeUnit.MILLISECONDS);
         }
