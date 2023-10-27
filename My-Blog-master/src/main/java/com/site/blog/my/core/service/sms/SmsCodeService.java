@@ -71,7 +71,7 @@ public class SmsCodeService {
         //设置短信验证码过期时间
         String expireTime = systemParamService.getValue(SMSCODE_EXPIRE_TIME+channel);
         //默认时间
-        long time = 5000;
+        long time = 500000;
         if (StringUtils.isNotBlank(expireTime)){
             time = Long.valueOf(expireTime);
         }
@@ -102,7 +102,7 @@ public class SmsCodeService {
         cacheService.removeCodeFromCache(smsCacheKey);
         smsReturnBean.setData(jsonObject);
         //验证码放入redis缓存
-        cacheService.putCodeToCache(smsCacheKey,smsCode.toString(),time);
+        cacheService.putCodeToCache(smsCacheKey,jsonObject.toString(),time);
 
         log.info("验证码发送成功，手机号：[{}],短信验证码:[{}]",mobile,randomCode);
         return smsReturnBean;
