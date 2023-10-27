@@ -40,7 +40,7 @@ public class SmsService {
         try {
             client.sendSms(sendSmsRequest);
         }catch (Exception e){
-            logger.info("短信发送失败，手机号:[{}],失败原因：[{}]",e,mobileNo);
+            logger.info("短信发送失败，手机号:[{}],失败原因：[{}]",mobileNo,e);
             smsReturnBean.setErrorCode("999999");
             smsReturnBean.setErrorMsg("短信发送失败");
             return smsReturnBean;

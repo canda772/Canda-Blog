@@ -2,23 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.site.blog.my.core.dao.system.SystemParamMapper">
     <resultMap id="BaseResultMap" type="com.site.blog.my.core.entity.system.SystemParam">
-        <id column="id" jdbcType="INTEGER" property="adminUserId" />
-        <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="value" jdbcType="VARCHAR" property="value" />
-        <result column="type" jdbcType="VARCHAR" property="type" />
-        <result column="desc" jdbcType="VARCHAR" property="desc" />
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="param_name" jdbcType="VARCHAR" property="name" />
+        <result column="param_value" jdbcType="VARCHAR" property="value" />
+        <result column="param_type" jdbcType="VARCHAR" property="type" />
+        <result column="param_desc" jdbcType="VARCHAR" property="desc" />
         <result column="valid" jdbcType="BOOLEAN" property="valid" />
         <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
         <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     </resultMap>
     <sql id="Base_Column_List">
-        id, name, value, type, desc, valid, create_date, update_date
+        param_name, param_value, param_type, param_desc, valid
     </sql>
 
-    <select id="findByName" resultMap="BaseResultMap">
+    <select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT
-        value
+        <include refid="Base_Column_List"/>
         FROM system_param
-        WHERE name = #{name,jdbcType=VARCHAR}
+        WHERE param_name = #{name,jdbcType=VARCHAR}
     </select>
 </mapper>

@@ -1,9 +1,17 @@
 package com.site.blog.my.core.controller.blog;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.site.blog.my.core.config.Constants;
+import com.site.blog.my.core.config.cache.RedisCacheService;
+import com.site.blog.my.core.config.sms.SmsTypeEnum;
 import com.site.blog.my.core.controller.vo.BlogDetailVO;
+import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.BlogComment;
 import com.site.blog.my.core.entity.BlogLink;
+import com.site.blog.my.core.entity.sms.SmsReturnBean;
 import com.site.blog.my.core.service.*;
+import com.site.blog.my.core.service.sms.SmsCodeService;
 import com.site.blog.my.core.util.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -12,10 +20,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
+/**
+ * 不需要权限认证
+ */
 @Controller
 public class MyBlogController {
 
@@ -34,6 +46,108 @@ public class MyBlogController {
     private ConfigService configService;
     @Resource
     private CategoryService categoryService;
+    @Resource
+    private SmsCodeService smsCodeService;
+    @Resource
+    private RedisCacheService cacheService;
+    @Resource
+    private AdminUserService adminUserService;
+
+    /**
+     * 注册
+     * @return
+     */
+    @GetMapping({"/blog/register"})
+    public String register() {
+        return "blog/register";
+    }
+
+    /**
+     * 注册发送验证码
+     * @param session
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/blog/sendSmsCode")
+    public String sendSmsCode(@RequestBody HashMap<String, String> map , HttpSession session) throws Exception {
+        String mobileNo = map.get("mobileNo");
+
+        if (StringUtils.isEmpty(mobileNo)){
+            session.setAttribute("errorMsg", "手机号不能为空");
+            return "admin/register";
+        }
+
+
+        try {
+            //todo 未接入通信服务商，使用假数据
+            SmsReturnBean smsReturnBean = smsCodeService.sendSmsCode(mobileNo, SmsTypeEnum.valueOfName("login"),"REGISTER");
+            if(!smsReturnBean.getErrorCode().equals("000000")){
+//                session.setAttribute("errorMsg", "短信发送失败,请重试");
+//                return "admin/register";
+                session.setAttribute("errorMsg", "短信已发送");
+                return "blog/register";
+            }
+        }catch (Exception e){
+            session.setAttribute("errorMsg", "短信发送失败,请重试");
+            return "admin/register";
+        }
+        session.setAttribute("errorMsg", "短信已发送");
+        return "blog/register";
+    }
+
+
+    /**
+     * 注册确认
+     * @param mobileNo
+     * @param verifyCode
+     * @param session
+     * @return
+     * @throws Exception
+     */
+    @PostMapping(value = "/blog/register")
+    public String register(@RequestParam("mobileNo") String mobileNo, @RequestParam("verifyCode") String verifyCode, HttpSession session) throws Exception {
+        if (StringUtils.isEmpty(verifyCode)) {
+            session.setAttribute("errorMsg", "验证码不能为空");
+            return "blog/register";
+        }
+
+        if (StringUtils.isEmpty(mobileNo) || StringUtils.isEmpty(verifyCode)) {
+            session.setAttribute("errorMsg", "手机号或验证码不能为空");
+            return "blog/register";
+        }
+
+        String smsCodeString =  cacheService.getCodeFromCache(Constants.SMS_CACHE_PREFIX+"REGISTER_"+mobileNo);
+        System.out.println("key: "+Constants.SMS_CACHE_PREFIX+"REGISTER_"+mobileNo+"获取到的验证码为："+smsCodeString);
+        if (StringUtils.isEmpty(smsCodeString)){
+            session.setAttribute("errorMsg", "短信验证码已过期，请重新进行短信发送");
+            return "blog/register";
+        }
+        JSONObject jsonObject = JSONObject.parseObject(smsCodeString);
+        String smsCode = jsonObject.getString("smsCode");
+        if (StringUtils.isEmpty(smsCode) || !smsCode.equals(verifyCode)) {
+            session.setAttribute("errorMsg", "验证码错误");
+            return "blog/register";
+        }
+
+        String passwordMd5 = MD5Util.MD5Encode(mobileNo, "UTF-8");
+
+        AdminUser adminUser = new AdminUser();
+        adminUser.setLoginUserName(mobileNo);
+        try {
+            Boolean IsRegister = adminUserService.selectByUserVo(adminUser);
+            if (!IsRegister){
+                session.setAttribute("errorMsg", "手机号已存在,请登录");
+                return "admin/login";
+            }
+            adminUser.setLoginPassword(passwordMd5);
+            adminUser.setNickName(mobileNo);
+            adminUserService.insertSelective(adminUser);
+        }catch (Exception e){
+            session.setAttribute("errorMsg", e);
+        }
+        session.setAttribute("errorMsg", "注册成功，请登录");
+        return "redirect:/admin/login";
+    }
 
     /**
      * 首页
